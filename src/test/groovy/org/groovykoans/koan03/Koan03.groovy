@@ -1,10 +1,17 @@
+/*
+ * Copyright (c) 2012-2014 nadavc <https://twitter.com/nadavc>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the WTFPL, Version 2, as published by Sam Hocevar.
+ * See the COPYING file for more details.
+ */
+
 package org.groovykoans.koan03
 
 /**
  * Koan03 - GroovyBeans and classes
  *
  * Resource list:
- *   http://groovy.codehaus.org/Groovy+Beans
+ *   http://docs.groovy-lang.org/latest/html/documentation/#_class
  *   http://mrhaki.blogspot.com/2009/09/groovy-goodness-parameters-with-default.html
  */
 class Koan03 extends GroovyTestCase {
@@ -14,7 +21,7 @@ class Koan03 extends GroovyTestCase {
         JavaPerson javaPerson = new JavaPerson("Argus", "Filch", "1234");
 
         // Groovy introduces an easier way to create JavaBeans. They're called GroovyBeans.
-        // Have a read here: http://groovy.codehaus.org/Groovy+Beans
+        // Have a read here: http://docs.groovy-lang.org/latest/html/documentation/#_class
         GroovyPerson groovyPerson = new GroovyPerson('Harry', 'Potter', '3322')
 
         // Explore the differences between JavaPerson and GroovyPerson and read some of the user guide above.
@@ -27,8 +34,8 @@ class Koan03 extends GroovyTestCase {
         groovyFirstName = groovyPerson.firstName
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertEquals('Argus', javaFirstName)
-        assertEquals('Harry', groovyFirstName)
+        assert javaFirstName == 'Argus'
+        assert groovyFirstName == 'Harry'
     }
 
     void test02_ReadOnlyFieldInGroovyBean() {
@@ -45,7 +52,7 @@ class Koan03 extends GroovyTestCase {
             failed = false
         }
 
-        assertTrue(failed)
+        assert failed
 
         // The code wrapping your additions verifies that the ReadOnlyProperty exception has been thrown.
         // The curly brackets ({}) represent a closure. We'll get into what that means very soon.
@@ -65,7 +72,7 @@ class Koan03 extends GroovyTestCase {
         transaction = new SimpleGroovyBean(title: 'Transaction', data: -30)
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertEquals(transaction.data, -30)
+        assert transaction.data == -30
     }
 
     void test04_DefaultValues() {
@@ -75,7 +82,7 @@ class Koan03 extends GroovyTestCase {
         // Once you've learned how to use default values, modify the NameWithDefaultValue
         // class to set name to 'Anonymous' if no name has been specified.
         def nameObject = new NameWithDefaultValue()
-        assertEquals(nameObject.name, 'Anonymous')
+        assert nameObject.name == 'Anonymous'
     }
 
 }

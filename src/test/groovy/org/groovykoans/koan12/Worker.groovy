@@ -5,15 +5,13 @@
  * See the COPYING file for more details.
  */
 
-package org.groovykoans.koan09
+package org.groovykoans.koan12
 
-class SensitiveService {
+public interface Worker {
 
-    int numberOfNukes = 0
-
-    String nukeCity(String username, String city) {
-        numberOfNukes++
-        return "$username has ordered to nuke $city. Nuking..."
-    }
+    /**
+     * Performs some heavy calculations in order to increment the given number
+     */
+    int work(int number);
 
 }

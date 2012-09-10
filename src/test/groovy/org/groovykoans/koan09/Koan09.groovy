@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012-2014 nadavc <https://twitter.com/nadavc>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the WTFPL, Version 2, as published by Sam Hocevar.
+ * See the COPYING file for more details.
+ */
+
 package org.groovykoans.koan09
 
 /**
@@ -6,8 +13,9 @@ package org.groovykoans.koan09
  * Reading list:
  *   * http://mrhaki.blogspot.com/2009/10/groovy-goodness-expando-as-dynamic-bean.html
  *   * http://mrhaki.blogspot.com/2009/11/groovy-goodness-intercept-methods-with.html
- *   * http://groovy.codehaus.org/Closures#Closures-thisowneranddelegate
+ *   * http://docs.groovy-lang.org/latest/html/documentation/index.html#_closures
  *   * http://stackoverflow.com/questions/8120949/what-does-delegate-mean-in-groovy/8121750#8121750
+ *   * http://docs.groovy-lang.org/latest/html/documentation/index.html#_invokemethod
  *   * http://mrhaki.blogspot.com/2009/12/groovy-goodness-adding-or-overriding.html
  *   * http://www.codinghorror.com/blog/2007/02/why-cant-programmers-program.html,
  *
@@ -21,16 +29,16 @@ class Koan09 extends GroovyTestCase {
 
         // Create an Expando class and dynamically create a 'firstName' property set with some value. Also
         // add a sayHello() method that returns "Hello from ${firstName}"
-        def expando
+        def expando = new Expando()
         // ------------ START EDITING HERE ----------------------
-        expando = new Expando(firstName: 'Frank')
-        expando.sayHello = {->
+        expando.firstName = 'Frank'
+        expando.sayHello = { ->
             "Hello from ${firstName}"
         }
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertNotNull('firstName property was not found', expando?.firstName)
-        assertEquals("Hello from ${expando.firstName}", expando.sayHello())
+        assert expando?.firstName != null, 'firstName property was not found'
+        assert expando.sayHello() == "Hello from ${expando.firstName}"
     }
 
     void test02_GroovyInterceptors() {
@@ -49,45 +57,31 @@ class Koan09 extends GroovyTestCase {
         proxy.use {
             def sensitiveService = new SensitiveService()
             sensitiveService.nukeCity('jojo', 'Hogsmeade')
-            assertEquals(sensitiveService.numberOfNukes, 0)
+            assert sensitiveService.numberOfNukes == 0
             sensitiveService.nukeCity('admin', 'Hogsmeade')
-            assertEquals(sensitiveService.numberOfNukes, 1)
+            assert sensitiveService.numberOfNukes == 1
         }
 
     }
 
     void test03_ThisDelegateAndOwner() {
         // Let's get to know the difference between this, owner, and delegate.
-        // Some reading is available here: http://groovy.codehaus.org/Closures#Closures-thisowneranddelegate
+        // Some reading is available here: http://docs.groovy-lang.org/latest/html/documentation/index.html#_closures
 
         // In Java, we only have the 'this' keyword. It returns the current instance. Groovy does exactly the same.
-        def whatIsThisEqual
+        def expectedThisClassName
         // ------------ START EDITING HERE ----------------------
-        whatIsThisEqual = 'org.groovykoans.koan09.Koan09'
+        expectedThisClassName = 'org.groovykoans.koan09.Koan09'
         // ------------ STOP EDITING HERE  ----------------------
-        assertEquals(this.class.name, whatIsThisEqual)
+        assert this.class.name == expectedThisClassName
 
-        def outerClosure = {->
-            println 'hello from first closure'
-            def innerClosure = {->
-                println 'hello from second closure'
-            }
-        }
         // The owner is the same thing as 'this'. Unless you are surrounded by a Closure, in which case the Closure is
         // your owner.
-        def firstClosureOwner, secondClosureOwner
-        // ------------ START EDITING HERE ----------------------
-        firstClosureOwner = 'org.groovykoans.koan09.Koan09'
-        secondClosureOwner = 'org.groovykoans.koan09.Koan09$_test03_ThisDelegateAndOwner_closure3'
-        // ------------ STOP EDITING HERE  ----------------------
-        assertEquals(outerClosure.owner.class.name, firstClosureOwner)
-        assertEquals(outerClosure().owner.class.name, secondClosureOwner)
 
         // And finally, delegate is the same as owner, only that it can be modified by an external script.
-        // Changing the delegate allows you to change the 'context' in which the closure is run. It may
-        // seem a bit artificial, but when we introduce Groovy Builders, you'll see how powerful this feature is.
+        // Changing the delegate allows you to change the 'context' in which the closure is run.
 
-        // First, let's revisit closures. In Koan04, we mentioned that a closure has parameters, an implicit variable,
+        // Let's revisit closures. In Koan04, we mentioned that a closure has parameters, an implicit variable,
         // and free variables. What are free variables? They're the variables that are 'inherited' into the closure
         // from the environment the closure was defined in. For example:
         def calculateWeight = { mass ->
@@ -103,22 +97,22 @@ class Koan09 extends GroovyTestCase {
         def weightOnEarth = calculateWeight(10)
 
         // Can you figure out what the values for weightOnEarth and weightOnMoon are?
-        def weightOnMoonResult, weightOnEarthResult
+        def expectedWeightOnMoon, expectedWeightOnEarth
         // ------------ START EDITING HERE ----------------------
-        weightOnMoonResult = 1.655
-        weightOnEarthResult = 10
+        expectedWeightOnMoon = 1.655
+        expectedWeightOnEarth = 10
         // ------------ STOP EDITING HERE  ----------------------
-        assertEquals(weightOnEarth, weightOnEarthResult)
-        assertEquals(weightOnMoon, weightOnMoonResult)
+        assert weightOnEarth == expectedWeightOnEarth
+        assert weightOnMoon == expectedWeightOnMoon
 
         // Now check out this Stackoverflow answer:
-        //
+        // http://stackoverflow.com/questions/8120949/what-does-delegate-mean-in-groovy/8121750#8121750
         // Create a fake environment using the technique in the link to create a gravity of 6
         // ------------ START EDITING HERE ----------------------
         calculateWeight.delegate = [gravity: 6]
         // ------------ STOP EDITING HERE  ----------------------
         def weightOnFakePlanet = calculateWeight(10)
-        assertEquals(60, weightOnFakePlanet)
+        assert weightOnFakePlanet == 60
     }
 
 
@@ -129,8 +123,8 @@ class Koan09 extends GroovyTestCase {
         Robot robot = new Robot()
 
         // Add the x,y properties to the Robot to continue...
-        assertEquals(0, robot.x)
-        assertEquals(0, robot.y)
+        assert robot.x == 0
+        assert robot.y == 0
 
         // Now add right(), left(), up(), and down(). Change x and y accordingly.
         robot.left()
@@ -140,20 +134,20 @@ class Koan09 extends GroovyTestCase {
         robot.down()
         robot.down()
 
-        assertEquals(-1, robot.x)
-        assertEquals(-1, robot.y)
+        assert robot.x == -1
+        assert robot.y == -1
 
         // Wouldn't it be nicer if we could create shorthand versions for combo moves? For example, goLeftLeftRightDown()?
-        // Read about invokeMethod() here: http://groovy.codehaus.org/Using+invokeMethod+and+getProperty
+        // Read about invokeMethod() here: http://docs.groovy-lang.org/latest/html/documentation/index.html#_invokemethod
         // invokeMethod() allows you to intercept all method calls, even if the method doesn't exist.
 
         // Using invokeMethod(), handle every possible goXYZ combination... Regular expressions will come in handy.
         robot.goLeftRightRightDown()
-        assertEquals([0, -2], [robot.x, robot.y])
+        assert [robot.x, robot.y] == [0, -2]
 
         // And what about this option?
         robot.goDownDownDownDown()
-        assertEquals([0, -6], [robot.x, robot.y])
+        assert [robot.x, robot.y] == [0, -6]
     }
 
     void test05_AddMethodsToExistingObjects() {
@@ -177,9 +171,9 @@ class Koan09 extends GroovyTestCase {
         }
         // ------------ STOP EDITING HERE  ----------------------
         def fizzBuzzes = (1..15).collect { it.fizzBuzz() }
-        def correctResult = ['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7', '8', 'Fizz',
+        def expectedFizzBuzzes = ['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7', '8', 'Fizz',
                 'Buzz', '11', 'Fizz', '13', '14', 'FizzBuzz']
-        assertEquals(correctResult, fizzBuzzes)
+        assert fizzBuzzes == expectedFizzBuzzes
     }
 
 }

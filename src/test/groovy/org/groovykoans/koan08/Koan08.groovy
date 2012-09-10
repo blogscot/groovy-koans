@@ -1,17 +1,24 @@
+/*
+ * Copyright (c) 2012-2014 nadavc <https://twitter.com/nadavc>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the WTFPL, Version 2, as published by Sam Hocevar.
+ * See the COPYING file for more details.
+ */
+
 package org.groovykoans.koan08
 
 /**
  * Koan08 - More goodness
  *
  * Resource list:
- *   * http://groovy.codehaus.org/Logical+Branching#LogicalBranching-switchstatement
+ *   * http://docs.groovy-lang.org/latest/html/documentation/index.html#_switch_case
  */
 class Koan08 extends GroovyTestCase {
 
     void test01_SwitchStatements() {
-        // Some people consider switch-case clauses to be a code small because the same behavior can be
+        // Some people consider switch-case clauses to be a code smell because the same behavior can be
         // achieved using polymorphism. Having said that, let's look at what Groovy has to offer.
-        // Have a read here: http://groovy.codehaus.org/Logical+Branching#LogicalBranching-switchstatement
+        // Have a read here: http://docs.groovy-lang.org/latest/html/documentation/index.html#_switch_case
 
         // Using a switch statement, create a closure that accepts input (could be string or number) and returns
         // the following:
@@ -27,7 +34,7 @@ class Koan08 extends GroovyTestCase {
                     result = input / 2
                     break
                 case ~/.*ee/:
-                    result = "${input[0..input.size() - 3]}ey"
+                    result = "${input[0..-3]}ey"
                     break;
                 default:
                     result = input
@@ -35,8 +42,8 @@ class Koan08 extends GroovyTestCase {
             result
             // ------------ STOP EDITING HERE  ----------------------
         }
-        [5: 2.5, 'smile': 'smile', 'smilee': 'smiley', 'heehee': 'heehey'].each { key, value ->
-            assertEquals(magicClosure(key), value)
+        [5: 2.5, 'smile': 'smile', 'smilee': 'smiley', 'heehee': 'heehey'].each { key, expectedValue ->
+            assert magicClosure(key) == expectedValue
         }
 
     }
@@ -84,11 +91,11 @@ class Koan08 extends GroovyTestCase {
 
     void test03_MultiAssignment() {
         // Sometimes you want to return more than one variable from a method. Yes, you could do it with an enclosing
-        // class, but it could be an overkill. Groovy calls it Multiple Assignments.
-        // http://groovy.codehaus.org/Multiple+Assignment
+        // class, but that would be an overkill. Groovy calls it Multiple Assignments.
+        // http://docs.groovy-lang.org/latest/html/documentation/index.html#_multiple_assignment
 
-        // Create a closure that returns two random integers in a given range
-        def generateTwoRandomInts=  { int maxInt ->
+        // Create a closure that returns two random integers between 0 (inclusive) to maxInt (exclusive)
+        def generateTwoRandomInts = { int maxInt ->
             // ------------ START EDITING HERE ----------------------
             def random = new Random()
             [random.nextInt(maxInt), random.nextInt(maxInt)]
@@ -96,8 +103,9 @@ class Koan08 extends GroovyTestCase {
         }
 
         def (intA, intB) = generateTwoRandomInts(10)
-        assertTrue(intA in 0..10)
-        assertTrue(intB in 0..10)
+        // Notice the half open notation for ranges... (http://groovy-lang.org/groovy-dev-kit.html#_working_with_collections)
+        assert intA in 0..<10
+        assert intB in 0..<10
     }
 
 }

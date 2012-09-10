@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012-2014 nadavc <https://twitter.com/nadavc>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the WTFPL, Version 2, as published by Sam Hocevar.
+ * See the COPYING file for more details.
+ */
+
 package org.groovykoans.koan03;
 
 import java.io.Serializable;
@@ -36,7 +43,7 @@ public class JavaPerson implements Serializable {
         this.lastName = lastName;
     }
 
-     // Since ssn cannot be modified, we only have a getter for this field
+    // Since ssn cannot be modified, we only have a getter for this field
     public String getSsn() {
         return ssn;
     }

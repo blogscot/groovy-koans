@@ -1,12 +1,19 @@
+/*
+ * Copyright (c) 2012-2014 nadavc <https://twitter.com/nadavc>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the WTFPL, Version 2, as published by Sam Hocevar.
+ * See the COPYING file for more details.
+ */
+
 package org.groovykoans.koan05
 
 /**
  * Koan05 - Iterations in Groovy
  *
  * Resource list:
- *  http://groovy.codehaus.org/groovy-jdk/java/util/Map.html#each(groovy.lang.Closure)
- *  http://groovy.codehaus.org/Collections#Collections-Ranges
- *  http://groovy.codehaus.org/groovy-jdk/java/lang/Object.html#eachWithIndex(groovy.lang.Closure)
+ *  http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Map.html#each(groovy.lang.Closure)
+ *  http://groovy-lang.org/groovy-dev-kit.html#_working_with_collections
+ *  http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Object.html#eachWithIndex(groovy.lang.Closure)
  */
 class Koan05 extends GroovyTestCase {
 
@@ -31,36 +38,36 @@ class Koan05 extends GroovyTestCase {
         }
 
         // How would you do this in Groovy?
-        // http://groovy.codehaus.org/groovy-jdk/java/util/Map.html#each(groovy.lang.Closure)
+        // http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Map.html#each(groovy.lang.Closure)
         def idListResult = []
         // ------------ START EDITING HERE ----------------------
         idToNameMap.each { key, value ->
             idListResult << "$key$value"
         }
         // ------------ STOP EDITING HERE  ----------------------
-        assertEquals(['333Matthew', '233Christopher', '133Dominic'], idListResult)
+        assert idListResult == ['333Matthew', '233Christopher', '133Dominic']
     }
 
     void test02_Ranges() {
         // Groovy allows you to create quick lists for sequential values. For example 5..10 or 'a'..'d'
-        // Read at http://groovy.codehaus.org/Collections#Collections-Ranges
+        // Read at http://groovy-lang.org/groovy-dev-kit.html#_working_with_collections
 
         // A simple example:
-        def fiveTo10WithRange = 5..10
+        def range = 5..10
 
-        // What will fiveTo10WithRange equal?
-        def rangeResult = []
+        // What will range equal?
+        def expectedRange = []
         // ------------ START EDITING HERE ----------------------
-        rangeResult = [5, 6, 7, 8, 9, 10]
+        expectedRange = [5, 6, 7, 8, 9, 10]
         // ------------ STOP EDITING HERE  ----------------------
-        assertEquals(fiveTo10WithRange, rangeResult)
+        assert range == expectedRange
     }
 
     void test03_IterateOnRanges() {
         // Just as you can iterate over lists, you can iterate over ranges.
 
         // Create a list of all odd letters (a, c, e, ... etc) using ranges
-        // http://groovy.codehaus.org/groovy-jdk/java/lang/Object.html#eachWithIndex(groovy.lang.Closure)
+        // http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Object.html#eachWithIndex(groovy.lang.Closure)
         def rangeResult = []
         // ------------ START EDITING HERE ----------------------
         def range = 'a'..'z'
@@ -69,9 +76,8 @@ class Koan05 extends GroovyTestCase {
                 rangeResult << value
         }
         // ------------ STOP EDITING HERE  ----------------------
-        assertEquals(['a', 'c', 'e', 'g', 'i', 'k', 'm', 'o', 'q', 's', 'u', 'w', 'y'], rangeResult)
+        assert rangeResult == ['a', 'c', 'e', 'g', 'i', 'k', 'm', 'o', 'q', 's', 'u', 'w', 'y']
     }
-
 
 
 }

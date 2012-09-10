@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012-2014 nadavc <https://twitter.com/nadavc>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the WTFPL, Version 2, as published by Sam Hocevar.
+ * See the COPYING file for more details.
+ */
+
 package org.groovykoans.koan02
 
 /**
@@ -17,12 +24,12 @@ class Koan02 extends GroovyTestCase {
         predicate2 = false
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertTrue(predicate1)
-        assertFalse(predicate2)
+        assert predicate1
+        assert predicate2 == false
     }
 
     void test02_Collections() {
-        // Lists and map evaluate to false if they're empty. Otherwise, they evaluate to true
+        // Lists and maps evaluate to false if they're empty.  Otherwise, they evaluate to true.
         Map<String, String> map = [:]
         List<String> list = ['item']
 
@@ -31,8 +38,8 @@ class Koan02 extends GroovyTestCase {
         list.clear()
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertTrue(map.asBoolean())
-        assertFalse(list.asBoolean())
+        assert map.asBoolean()
+        assert list.asBoolean() == false
     }
 
     void test03_StringTruth() {
@@ -49,12 +56,12 @@ class Koan02 extends GroovyTestCase {
         if (s1) {
             fail()
         }
-        assertTrue(s2.asBoolean())
+        assert s2.asBoolean()
     }
 
     void test04_NumericTruth() {
         // Similar to C code, null or zeros are false. Any other number is true.
-        def balance = [ 2, -3, 6, 0, 5 ]
+        def balance = [2, -3, 6, 0, 5]
 
         // Remove (or change) the offending integer to continue
         // ------------ START EDITING HERE ----------------------
@@ -63,12 +70,12 @@ class Koan02 extends GroovyTestCase {
 
         // Iterate through the list and AND the boolean values of its members.
         // For an easier way to do this in Groovy, check out the any() method at
-        // http://groovy.codehaus.org/groovy-jdk/java/lang/Object.html#any(groovy.lang.Closure)
+        // http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Object.html#any(groovy.lang.Closure)
         def result = true
         for (int i : balance) {
             result = result && i.asBoolean()
         }
-        assertTrue(result)
+        assert result
     }
 
 }

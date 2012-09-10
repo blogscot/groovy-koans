@@ -1,25 +1,32 @@
+/*
+ * Copyright (c) 2012-2014 nadavc <https://twitter.com/nadavc>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the WTFPL, Version 2, as published by Sam Hocevar.
+ * See the COPYING file for more details.
+ */
+
 package org.groovykoans.koan01
 
 /**
  * Koan01 - Groovy 101
  *
  * Resource list:
- *   http://groovy.codehaus.org/api/groovy/util/GroovyTestCase.html
- *   http://groovy.codehaus.org/Strings+and+GString#StringsandGString-GStrings
- *   http://groovy.codehaus.org/JN1035-Maps
- *   http://groovy.codehaus.org/JN1015-Collections
- *   http://groovy.codehaus.org/groovy-jdk/java/util/List.html
- *   http://groovy.codehaus.org/Operators#Operators-ElvisOperator
+ *   http://docs.groovy-lang.org/latest/html/api/groovy/util/GroovyTestCase.html
+ *   http://docs.groovy-lang.org/latest/html/documentation/index.html#all-strings
+ *   http://groovy-lang.org/groovy-dev-kit.html#_working_with_collections
+ *   http://groovy-lang.org/groovy-dev-kit.html#_working_with_collections
+ *   http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/List.html
+ *   http://docs.groovy-lang.org/latest/html/documentation/index.html#groovy-operators
  */
 class Koan01 extends GroovyTestCase {
 
     void test01_AssertionsAndSomeSyntax() {
         // Groovy introduces the GroovyTestCase for testing. We are using it as the base class for our unit tests.
-        // Docs for GroovyTestCase can be found at: http://groovy.codehaus.org/api/groovy/util/GroovyTestCase.html
+        // Docs for GroovyTestCase can be found at: http://docs.groovy-lang.org/latest/html/api/groovy/util/GroovyTestCase.html
 
         // Groovy can be used solely with Java syntax. You have full control over what facet of Groovy you want.
 
-        // Let's start. First - Groovy requires much less boiletplate code. For example, in Groovy we don't
+        // Let's start. First - Groovy requires much less boilerplate code. For example, in Groovy we don't
         // have to use semicolons at all. As a matter of fact, we don't always need to define the type of the variable!
         boolean assertion = false
         def hello = "Hola"
@@ -30,15 +37,15 @@ class Koan01 extends GroovyTestCase {
         assertion = true
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertTrue('Assign "true" to the "assertion" variable to proceed', assertion)
-        assertEquals('Modify "Hola" to "Hello" to proceed', "Hello", hello)
+        assert assertion, 'Assign "true" to the "assertion" variable to proceed'
+        assert hello == "Hello", 'Modify "Hola" to "Hello" to proceed'
     }
 
 
     void test02_GStrings() {
         // Groovy allows you to use either regular quotes (') or double-quotes (") for String declarations.
         // The difference is that double-quotes create a GString, which is a super-powered String.
-        // For docs about GStrings, see http://groovy.codehaus.org/Strings+and+GString#StringsandGString-GStrings
+        // For docs about GStrings, see http://docs.groovy-lang.org/latest/html/documentation/index.html#all-strings
 
         // GStrings allow you to use the ${} syntax within them. The ${} can contain any valid Groovy expression.
         def name = 'George'
@@ -51,12 +58,12 @@ class Koan01 extends GroovyTestCase {
         result = "The size of the string '${greeting}' is ${greeting.size()}"
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertEquals("The size of the string 'Hello George, how are you?' is 26", result)
+        assert result == "The size of the string 'Hello George, how are you?' is 26"
     }
 
     void test03_MapsInGroovy() {
         // Maps are also special citizens in Groovyland.
-        // Docs can be found here: http://groovy.codehaus.org/JN1035-Maps
+        // Docs can be found here: http://groovy-lang.org/groovy-dev-kit.html#_working_with_collections
         def map = [right: 'derecha', left: 'izquierda']
 
         // Concatenate the two values of 'right' and 'left' into result to proceed using Groovy syntax
@@ -65,7 +72,7 @@ class Koan01 extends GroovyTestCase {
         result = map['right'] + map['left']
         // ------------ STOP EDITING HERE  ----------------------
 
-        assertLength(16, result.toCharArray())
+        assert result.toCharArray().size() == 16
     }
 
     void test04_Lists() {
@@ -76,8 +83,8 @@ class Koan01 extends GroovyTestCase {
         javaList.add("Prince");
 
         // In Groovy, this is simplified to:
-        // (See http://groovy.codehaus.org/JN1015-Collections
-        // and http://groovy.codehaus.org/groovy-jdk/java/util/List.html)
+        // (See http://groovy-lang.org/groovy-dev-kit.html#_working_with_collections
+        // and http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/List.html)
         def groovyList = ['King', 'Prince']
 
         // Add the missing item to the Groovy list. Pay attention to the order of the items.
@@ -87,17 +94,17 @@ class Koan01 extends GroovyTestCase {
         // ------------ STOP EDITING HERE  ----------------------
 
         // Note how Groovy allows you to compare the *content* of the lists
-        assertEquals(javaList, groovyList)
+        assert groovyList == javaList
     }
 
     void test05_ElvisAndSafeNavigation() {
         // Preparation code for the examples that follow. We'll get to this code in later Koans.
         User player = new User('Ronaldo', 'Nazário de Lima', 'ron', null)
-        UserService userServiceWithUserLoggedIn = [getLoggedInUser: {player}] as UserService
-        UserService userServiceWithoutLoggedInUser = [getLoggedInUser: {null}] as UserService
+        UserService userServiceWithUserLoggedIn = [getLoggedInUser: { player }] as UserService
+        UserService userServiceWithoutLoggedInUser = [getLoggedInUser: { null }] as UserService
 
         // Groovy introduces two convenient operators for dealing with nulls: elvis (?:) and safe navigation (?.)
-        // Read all about it at http://groovy.codehaus.org/Operators#Operators-ElvisOperator
+        // Read all about it at http://docs.groovy-lang.org/latest/html/documentation/index.html#groovy-operators
 
         // Assume we have a User object that may or may not contain a first name and an address.
         // In Java, we could end up with the following code:
@@ -105,7 +112,8 @@ class Koan01 extends GroovyTestCase {
         String firstName = player.getFirstName();
         String javaDisplayName = firstName == null ? player.getUsername() : firstName;
         String javaCity = "";
-        if (player.getAddress() != null && player.getAddress().getCity() != null) { // Be careful of NullPointerExceptions
+        if (player.getAddress() != null && player.getAddress().getCity() != null) {
+            // Be careful of NullPointerExceptions
             javaCity = player.getAddress().getCity();
         }
 
@@ -116,8 +124,8 @@ class Koan01 extends GroovyTestCase {
         // Using your newly acquired knowledge, fix the createMessageForUser method below
         // so that anonymous users get 'Hello Anonymous!' and logged in users get 'Hello <first name>'
         // You should use userService.getLoggedInUser() as well.
-        assertEquals(createMessageForUser(userServiceWithUserLoggedIn), 'Hello Ronaldo!')
-        assertEquals(createMessageForUser(userServiceWithoutLoggedInUser), 'Hello Anonymous!')
+        assert createMessageForUser(userServiceWithUserLoggedIn) == 'Hello Ronaldo!'
+        assert createMessageForUser(userServiceWithoutLoggedInUser) == 'Hello Anonymous!'
     }
 
     private String createMessageForUser(UserService userService) {
@@ -131,4 +139,3 @@ class Koan01 extends GroovyTestCase {
     }
 
 }
-

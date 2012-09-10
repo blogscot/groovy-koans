@@ -5,15 +5,21 @@
  * See the COPYING file for more details.
  */
 
-package org.groovykoans.koan09
+package org.groovykoans.koan12
 
-class SensitiveService {
+class StaticFactory {
 
-    int numberOfNukes = 0
+    List<Integer> numbers
 
-    String nukeCity(String username, String city) {
-        numberOfNukes++
-        return "$username has ordered to nuke $city. Nuking..."
+    static Worker getWorker() {
+        return new HardWorker()
     }
+
+    List<Integer> work() {
+        numbers.collect {
+            getWorker().work(it)
+        }
+    }
+
 
 }

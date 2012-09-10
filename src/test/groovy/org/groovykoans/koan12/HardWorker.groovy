@@ -5,15 +5,13 @@
  * See the COPYING file for more details.
  */
 
-package org.groovykoans.koan09
+package org.groovykoans.koan12
 
-class SensitiveService {
+class HardWorker implements Worker {
 
-    int numberOfNukes = 0
-
-    String nukeCity(String username, String city) {
-        numberOfNukes++
-        return "$username has ordered to nuke $city. Nuking..."
+    @Override
+    int work(int number) {
+        Thread.sleep(1000)
+        return number + 10;
     }
-
 }
