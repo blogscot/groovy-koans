@@ -11,7 +11,13 @@ public enum Feeling {
     Happy, Sad, Neutral, Suicidal, Anticipation, Surprised, Relaxed, Guilty
 
     // ------------ START EDITING HERE ----------------------
+    def isCase(Person person) {
+      person.feelings.contains(this)
+    }
 
+    def isCase(Cartoon cartoon) {
+      cartoon.feeling = this
+    }
 
 
 

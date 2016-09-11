@@ -28,10 +28,17 @@ class Koan08 extends GroovyTestCase {
 
         def magicClosure = { input ->
             // ------------ START EDITING HERE ----------------------
-
-
-
-
+            switch (input) {
+              case 1..100:
+                input / 2
+                break
+              case ~/.*ee$/:
+                def end = input.size()
+                input.substring(0, end-1) + 'y'
+                break
+              default:
+                input
+            }
             // ------------ STOP EDITING HERE  ----------------------
         }
         [5: 2.5, 'smile': 'smile', 'smilee': 'smiley', 'heehee': 'heehey'].each { key, expectedValue ->
@@ -41,17 +48,19 @@ class Koan08 extends GroovyTestCase {
     }
 
     void test02_IsCaseInSwitch() {
-        // What the switch-case clause basically does in the following:
+        // Under the covers the switch-case clause uses the isCase() function.
 
         // switch (test) {
-        //   case candidate: break;
+        //   case candidate:
+        //     do stuff
+        //     break
         // }
         //
         // candidate.isCase(test)
 
         // This means that if we implement our own isCase(), we can take advantage of it in switch statements.
         // For this exercise we have a Cartoon object that has one single feeling.
-        // Let's implement a isCase() in Feeling so we can use switch-case on a Cartoon.
+        // Let's implement a isCase() in Feeling so we can use a switch case on a Cartoon.
 
         def cartoon = new Cartoon(name: 'Mickey Mouse', feeling: Feeling.Guilty)
 
@@ -63,7 +72,8 @@ class Koan08 extends GroovyTestCase {
                 fail()
         }
 
-        // Suppose people may have more than one Feeling. Implement the appropriate isCase to allow switching on them
+        // Suppose people may have more than one Feeling. Implement the appropriate
+        // isCase to allow switching on them
         def person = new Person(name: 'Jack Bauer', feelings: [Feeling.Suicidal, Feeling.Relaxed])
 
         switch (person) {
@@ -82,17 +92,17 @@ class Koan08 extends GroovyTestCase {
     }
 
     void test03_MultiAssignment() {
-        // Sometimes you want to return more than one variable from a method. Yes, you could do it with an enclosing
-        // class, but that would be an overkill. Groovy calls it Multiple Assignments.
+        // Sometimes you want to return more than one variable from a method.
+        // Yes, you could do it with an enclosing class, but that would be an
+        // overkill. Groovy calls it Multiple Assignments.
         // http://docs.groovy-lang.org/latest/html/documentation/index.html#_multiple_assignment
 
         // Create a closure that returns two random integers between 0 (inclusive) to maxInt (exclusive)
         def generateTwoRandomInts = { int maxInt ->
             // ------------ START EDITING HERE ----------------------
-
-
-
-
+            int max = maxInt+1
+            Random rand = new Random()
+            [rand.nextInt(max), rand.nextInt(max)]
             // ------------ STOP EDITING HERE  ----------------------
         }
 
