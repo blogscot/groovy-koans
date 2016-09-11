@@ -34,19 +34,21 @@ class Koan06 extends GroovyTestCase {
         // Groovy-fy the above code, using StringBuilder and with() to get the same result in Groovy
         String groovyResult
         // ------------ START EDITING HERE ----------------------
-        groovyResult = new StringBuilder().with {
-            append(/roses are #FF0000\n/)
-            append(/violets are #0000FF\n/)
-            append(/all my base\n/)
-            append(/are belong to you\n/)
-            return it.toString()
+        StringBuilder groovyStringBuilder = new StringBuilder().with {
+          append "roses are #FF0000\\n"
+          append "violets are #0000FF\\n"
+          append "all my base\\n"
+          append "are belong to you\\n"
+          return it
         }
+
+        groovyResult = groovyStringBuilder.toString()
         // ------------ STOP EDITING HERE  ----------------------
         assert groovyResult == javaResult
     }
 
     void test02_CollectMethodOnLists() {
-        // We're often required to iterate through a whole list and and perform some sort of transformation on
+        // We're often required to iterate through a whole list and perform some sort of transformation on
         // some (or all) of the items, returning a new list. Groovy has a method just for that:
         // http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Object.html#collect(groovy.lang.Closure)
 
@@ -69,12 +71,21 @@ class Koan06 extends GroovyTestCase {
         int count = 0
         // ------------ START EDITING HERE ----------------------
         new File('src').eachFileRecurse { File file ->
-            if (!file.isDirectory() && file.text.contains('Lorem'))
-                count++
+          if (!file.isDirectory() && file.text.contains('Lorem')) {
+            count++
+          }
         }
         // ------------ STOP EDITING HERE  ----------------------
         assert count == 3
 
+    }
+
+    def isPrime(int value) {
+      if (value <= 2) return false
+      if (value == 3) return true
+      def upperlimit = Math.sqrt value
+
+      (2..upperlimit).every { value % it != 0 }
     }
 
     void test04_ConcludingExercise() {
@@ -82,14 +93,9 @@ class Koan06 extends GroovyTestCase {
         // range objects, store all the prime numbers between 200 and 250 in the target variable
         def primesBetween200And250 = []
         // ------------ START EDITING HERE ----------------------
-        primesBetween200And250 = (200..250).findAll { candidate ->
-            (2..<candidate).every { divisor ->
-                candidate % divisor != 0
-            }
-        }
+        primesBetween200And250 = (200..250).findAll { isPrime it }
         // ------------ STOP EDITING HERE  ----------------------
         assert primesBetween200And250 == [211, 223, 227, 229, 233, 239, 241]
 
     }
-
 }

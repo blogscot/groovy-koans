@@ -31,7 +31,7 @@ class Koan07 extends GroovyTestCase {
         def technologies = ['Grails', 'Gradle', '.NET', 'Python', 'Groovy']
         def regexp
         // ------------ START EDITING HERE ----------------------
-        regexp = '^G.*[e|s]$'
+        regexp =  /G.*[se]/
         // ------------ STOP EDITING HERE  ----------------------
         def result = technologies.findAll { it ==~ regexp }
 
@@ -50,9 +50,10 @@ class Koan07 extends GroovyTestCase {
                 "and can become difficult to maintain"
         String groovyString
         // ------------ START EDITING HERE ----------------------
-        groovyString = """In Java a multiline string
-requires using special signs such as $signs
-and can become difficult to maintain"""
+        groovyString =
+        """|In Java a multiline string
+           |requires using special signs such as ${signs}
+           |and can become difficult to maintain""".stripMargin()
         // ------------ STOP EDITING HERE  ----------------------
         assert groovyString == javaString
     }
@@ -80,7 +81,7 @@ and can become difficult to maintain"""
         // a Slashy string regexp
         def groovyRegExp
         // ------------ START EDITING HERE ----------------------
-        groovyRegExp = /(?sm)(.*?)\s+(\d+)\s+(\d+)/
+        groovyRegExp =  /(?sm)(.*?)\s+(\d+)\s+(\d+)/
         // ------------ STOP EDITING HERE  ----------------------
         def matcher = text =~ groovyRegExp
         def groovySum = matcher.collect { it[3].toInteger() }.sum()
@@ -113,12 +114,9 @@ and can become difficult to maintain"""
         def names = 'John Lennon, Paul McCartney, George Harrison, Ringo Starr'
         def firstNamesList = []
         // ------------ START EDITING HERE ----------------------
-        def matcher = names =~ /(\w+)\s(\w+)/
-        matcher.each { match, first, last ->
-            firstNamesList << first
-        }
-        // Note - there are better ways to achieve the same in Groovy (String.eachMatch, Collections.collect, etc)
-        // but that's not the point of this specific exercise :)
+        def p = ~/(\w+)\s/
+        def matcher = names =~ p
+        firstNamesList = matcher.collect { match, first -> first }
         // ------------ STOP EDITING HERE  ----------------------
         assert firstNamesList == ['John', 'Paul', 'George', 'Ringo']
 
@@ -127,7 +125,8 @@ and can become difficult to maintain"""
         def number = '4927856234092'
         boolean isNumberValid = false
         // ------------ START EDITING HERE ----------------------
-        isNumberValid = number ==~ /^4[0-9]{12}(?:[0-9]{3})?$/
+        p = ~/^4[0-9]{12}(?:[0-9]{3})?$/
+        isNumberValid = number ==~ p
         // ------------ STOP EDITING HERE  ----------------------
         assert isNumberValid, 'Visa number should be valid!'
     }
@@ -146,7 +145,7 @@ and can become difficult to maintain"""
                       |In the land of submarines'''.stripMargin()
         def result
         // ------------ START EDITING HERE ----------------------
-        result = song.replaceAll(/\w+/) { dictionary[it] ?: it }
+        result = song.replaceAll(~/\w+/) { dictionary[it] ?: it }
         // ------------ STOP EDITING HERE  ----------------------
 
         def expected = '''|In the ciudad where I was born
@@ -171,12 +170,14 @@ and can become difficult to maintain"""
         // create the same regular expression to sum the total leftovers, but this time document the regex
         String regexp
         // ------------ START EDITING HERE ----------------------
-        regexp = /(?smx)
-                 (.*?)      # item name
-                 \s+        # space
-                 (\d+)      # number sold
-                 \s+        # space
-                 (\d+)      # leftover/
+        regexp = '''(?ix)       # enable case-insensitive matches, extended patterns
+                    (?sm)       # multi-line parsing
+                    (.*?)       # heading
+                    \\s+        # White space
+                    (\\d+)      # Sold
+                    \\s+        # White space
+                    (\\d+)      # Leftover
+        '''
         // ------------ STOP EDITING HERE  ----------------------
         def sum = text.findAll(regexp) { it[3].toInteger() }.sum()
         // ^^ This is even more concise than the previous example! Choose the one you feel most comfortable with.

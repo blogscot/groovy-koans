@@ -35,7 +35,7 @@ class Koan04 extends GroovyTestCase {
         // What is the result from the above execution?
         def expectedHelloClosureResult
         // ------------ START EDITING HERE ----------------------
-        expectedHelloClosureResult = 'Hello from Closure'
+        expectedHelloClosureResult = "Hello from Closure"
         // ------------ STOP EDITING HERE  ----------------------
         assert helloClosureResult == expectedHelloClosureResult
 
@@ -66,7 +66,7 @@ class Koan04 extends GroovyTestCase {
         // Create a closure that accepts two integers, adds them, and multiplies the result by two
         def resultClosure
         // ------------ START EDITING HERE ----------------------
-        resultClosure = { int a, int b -> (a + b) * 2 }
+        resultClosure = {int a, int b -> ( a + b ) * 2}
         // ------------ STOP EDITING HERE  ----------------------
 
         assert resultClosure(2, 3) == 10
@@ -96,7 +96,7 @@ class Koan04 extends GroovyTestCase {
 
         // Let's check that we got the same result (you can use the assertX methods)
         // ------------ START EDITING HERE ----------------------
-        assert javaResult == groovyResult
+        assert groovyResult == javaResult
         // ------------ STOP EDITING HERE  ----------------------
 
         // To make the code even cleaner, Groovy allows some syntactic sugar. If your method has a closure as its
@@ -123,10 +123,8 @@ class Koan04 extends GroovyTestCase {
         StringWriter filteredResult = new StringWriter()
         def prefix = 'src/test/groovy/org/groovykoans/koan04/'
         // ------------ START EDITING HERE ----------------------
-        def file = new File("$prefix/exercise.txt")
-        file.filterLine(filteredResult) { String line ->
-            !line.startsWith('#')
-        }
+        File file = new File(prefix+"/exercise.txt")
+        file.filterLine(filteredResult) { String line -> !line.startsWith('#') }
         // ------------ STOP EDITING HERE  ----------------------
 
         String result = filteredResult.toString().trim().replaceAll(/[\n\r]+/, '\n')
