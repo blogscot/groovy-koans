@@ -15,5 +15,4 @@ class SensitiveService {
         numberOfNukes++
         return "$username has ordered to nuke $city. Nuking..."
     }
-
 }

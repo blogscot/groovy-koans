@@ -31,10 +31,10 @@ class Koan09 extends GroovyTestCase {
         // add a sayHello() method that returns "Hello from ${firstName}"
         def expando = new Expando()
         // ------------ START EDITING HERE ----------------------
-
-
-
-
+        expando.firstName = "Guido"
+        expando.sayHello = { ->
+          "Hello from ${firstName}"
+        }
         // ------------ STOP EDITING HERE  ----------------------
 
         assert expando?.firstName != null, 'firstName property was not found'
@@ -42,18 +42,18 @@ class Koan09 extends GroovyTestCase {
     }
 
     void test02_GroovyInterceptors() {
-        // Groovy's dynamic nature allows you to add custom interceptors to all method invocations. This is very similar
-        // to AOP and can prove to be very useful, if used with caution.
+        // Groovy's dynamic nature allows you to add custom interceptors to all
+        // method invocations. This is very similar to AOP and can prove to be
+        // very useful, if used with caution.
         // Read here: http://mrhaki.blogspot.com/2009/11/groovy-goodness-intercept-methods-with.html
 
-        // sensitiveService.nukeCity(username, city) allows you to nuke cities. But only if you're an 'admin'.
+        // sensitiveService.nukeCity(username, city) allows you to nuke cities.
+        // But only if you're an 'admin'.
         // Using the NukeInterceptor, make sure that only admin is allowed to run this service.
         def proxy
         // ------------ START EDITING HERE ----------------------
-
-
-
-
+        proxy = ProxyMetaClass.getInstance(SensitiveService)
+        proxy.interceptor = new NukeInterceptor()
         // ------------ STOP EDITING HERE  ----------------------
 
         proxy.use {
@@ -70,24 +70,24 @@ class Koan09 extends GroovyTestCase {
         // Let's get to know the difference between this, owner, and delegate.
         // Some reading is available here: http://docs.groovy-lang.org/latest/html/documentation/index.html#_closures
 
-        // In Java, we only have the 'this' keyword. It returns the current instance. Groovy does exactly the same.
+        // In Java, we only have the 'this' keyword. It returns the current instance.
+        // Groovy does exactly the same.
         def expectedThisClassName
         // ------------ START EDITING HERE ----------------------
-
-
-
-
+        expectedThisClassName = 'org.groovykoans.koan09.Koan09'
         // ------------ STOP EDITING HERE  ----------------------
         assert this.class.name == expectedThisClassName
 
-        // The owner is the same thing as 'this'. Unless you are surrounded by a Closure, in which case the Closure is
-        // your owner.
+        // The owner is the same thing as 'this'. Unless you are surrounded by a
+        // Closure, in which case the Closure is your owner.
 
-        // And finally, delegate is the same as owner, only that it can be modified by an external script.
-        // Changing the delegate allows you to change the 'context' in which the closure is run.
+        // And finally, delegate is the same as owner, only that it can be modified
+        // by an external script. Changing the delegate allows you to change the
+        // 'context' in which the closure is run.
 
-        // Let's revisit closures. In Koan04, we mentioned that a closure has parameters, an implicit variable,
-        // and free variables. What are free variables? They're the variables that are 'inherited' into the closure
+        // Let's revisit closures. In Koan04, we mentioned that a closure has
+        // parameters, an implicit variable, and free variables. What are free
+        // variables? They're the variables that are 'inherited' into the closure
         // from the environment the closure was defined in. For example:
         def calculateWeight = { mass ->
             mass * gravity   // gravity is a free variable, mass is a parameter
@@ -104,10 +104,7 @@ class Koan09 extends GroovyTestCase {
         // Can you figure out what the values for weightOnEarth and weightOnMoon are?
         def expectedWeightOnMoon, expectedWeightOnEarth
         // ------------ START EDITING HERE ----------------------
-
-
-
-
+        (expectedWeightOnMoon, expectedWeightOnEarth) = [1.655, 10]
         // ------------ STOP EDITING HERE  ----------------------
         assert weightOnEarth == expectedWeightOnEarth
         assert weightOnMoon == expectedWeightOnMoon
@@ -116,10 +113,7 @@ class Koan09 extends GroovyTestCase {
         // http://stackoverflow.com/questions/8120949/what-does-delegate-mean-in-groovy/8121750#8121750
         // Create a fake environment using the technique in the link to create a gravity of 6
         // ------------ START EDITING HERE ----------------------
-
-
-
-
+        calculateWeight.delegate = [gravity:6]
         // ------------ STOP EDITING HERE  ----------------------
         def weightOnFakePlanet = calculateWeight(10)
         assert weightOnFakePlanet == 60
@@ -128,7 +122,8 @@ class Koan09 extends GroovyTestCase {
 
     void test04_InvokeMethod() {
         // Let's create a Robot that is able to move left, right, up, or down.
-        // The Robot should have a (X,Y) coordinates that will change according to the commands it was given.
+        // The Robot should have a (X,Y) coordinates that will change according
+        // to the commands it was given.
 
         Robot robot = new Robot()
 
@@ -147,11 +142,13 @@ class Koan09 extends GroovyTestCase {
         assert robot.x == -1
         assert robot.y == -1
 
-        // Wouldn't it be nicer if we could create shorthand versions for combo moves? For example, goLeftLeftRightDown()?
+        // Wouldn't it be nicer if we could create shorthand versions for combo
+        // moves? For example, goLeftLeftRightDown()?
         // Read about invokeMethod() here: http://docs.groovy-lang.org/latest/html/documentation/index.html#_invokemethod
         // invokeMethod() allows you to intercept all method calls, even if the method doesn't exist.
 
-        // Using invokeMethod(), handle every possible goXYZ combination... Regular expressions will come in handy.
+        // Using invokeMethod(), handle every possible goXYZ combination...
+        // Regular expressions will come in handy.
         robot.goLeftRightRightDown()
         assert [robot.x, robot.y] == [0, -2]
 
@@ -172,10 +169,20 @@ class Koan09 extends GroovyTestCase {
         //   - otherwise, return the number itself (as a String)
 
         // ------------ START EDITING HERE ----------------------
-
-
-
-
+        Integer.metaClass.fizzBuzz << {
+            def num = delegate
+            def mod3 = num % 3 == 0
+            def mod5 = num % 5 == 0
+            if (mod3 && mod5) {
+              "FizzBuzz"
+            } else if (mod5) {
+              "Buzz"
+            } else if (mod3) {
+               "Fizz"
+            } else {
+               num.toString()
+            }
+        }
         // ------------ STOP EDITING HERE  ----------------------
         def fizzBuzzes = (1..15).collect { it.fizzBuzz() }
         def expectedFizzBuzzes = ['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7', '8', 'Fizz',
